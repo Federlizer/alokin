@@ -1,21 +1,19 @@
 import Discord, { Message } from 'discord.js';
 
-import ICommand from './commands/ICommand';
+import { ICommand } from './commands';
 
 export interface Options {
   prefix: string;
-  token: string;
   commands: ICommand[];
 }
 
 export class Alokin {
-  private prefix: string;
-  private commands: Discord.Collection<string, ICommand>;
   private client: Discord.Client;
-  private token: string;
+  private commands: Discord.Collection<string, ICommand>;
+
+  private prefix: string;
 
   constructor(opts: Options) {
-    this.token = opts.token;
     this.prefix = opts.prefix;
 
     this.client = new Discord.Client();
@@ -28,6 +26,10 @@ export class Alokin {
     this.setupListener();
   }
 
+
+  /**
+   * Sets up the command executor
+   */
   private setupListener(): void {
     this.client.on('message', (message: Message) => {
       if (!message.content.startsWith(this.prefix) || message.author.bot) {
@@ -55,15 +57,16 @@ export class Alokin {
     });
   }
 
-  public start(): Promise<void> {
-    return new Promise<void>((resolve) => {
-      this.client.once('ready', () => {
-        resolve();
-      });
-      this.client.login(this.token);
-    });
+  /**
+   * Starts Alokin (logs him in)
+   */
+  public async start(token: string): Promise<string> {
+    return this.client.login(token)
   }
 
+  /**
+   * Gracefully shuts down Alokin
+   */
   public stop(): Promise<void> {
     return this.client.destroy()
   }
