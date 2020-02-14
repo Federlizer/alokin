@@ -1,9 +1,14 @@
 import { Alokin } from './Alokin';
+import commands from './commands';
 import config from './config.json';
+
 
 const alokin = new Alokin({
   token: config.token,
+  prefix: config.prefix,
+  commands,
 });
+
 
 alokin.start()
   .then(() => console.log('Aloking has been setup'))
