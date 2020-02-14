@@ -1,7 +1,6 @@
 import { Alokin } from './Alokin';
 import commands from './commands';
-import config from './config.json';
-
+import config from './config';
 
 const alokin = new Alokin({
   prefix: config.prefix,
