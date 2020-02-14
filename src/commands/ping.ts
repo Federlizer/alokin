@@ -1,9 +1,7 @@
 import { Message } from 'discord.js';
 
 function ping(message: Message) {
-  const channel = message.channel;
-
-  channel.send('Pong!');
+  message.reply('Pong!');
 }
 
 export default {
