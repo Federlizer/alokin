@@ -1,6 +1,6 @@
 import { Message } from 'discord.js';
 
-function ping(message: Message) {
+function ping(message: Message, _: string[]) {
   message.reply('Pong!');
 }
 

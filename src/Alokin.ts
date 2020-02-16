@@ -49,7 +49,7 @@ export class Alokin {
       }
 
       try {
-        this.commands.get(command)!.execute(message);
+        this.commands.get(command)!.execute(message, args);
       } catch (err) {
         console.error(err);
         message.reply('There was an error while trying to execute this command. Plese check the logs.');
