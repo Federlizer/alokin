@@ -9,7 +9,7 @@ import {
 
 import Tournament from '../../models/Tournament';
 
-function execute(message: Message, args: string[]) {
+async function execute(message: Message, args: string[]) {
   const channel: (TextChannel|DMChannel|GroupDMChannel) = message.channel;
 
   if (!(channel instanceof TextChannel)) {
@@ -17,17 +17,14 @@ function execute(message: Message, args: string[]) {
     return;
   }
 
-  const tournament = new Tournament({
+  let tournament = new Tournament({
     name: args[0] ?? channel.name,
   });
 
-  tournament.save()
-    .then((data) => {
-      console.log(data);
-      const msg = 'Registration for TOURNAMENT_NAME is open';
-      channel.send(msg);
-    })
-    .catch((err) => console.error(err));
+  tournament = await tournament.save();
+
+  const msg = `Registration for ${tournament.name} is open`;
+  channel.send(msg);
 }
 
 export default {
