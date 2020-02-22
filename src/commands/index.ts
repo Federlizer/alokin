@@ -2,6 +2,7 @@ import { Message } from 'discord.js';
 
 import pingCommand from './ping';
 import signupCommand from './signup';
+import openCommand from './open';
 
 export interface ICommand {
   name: string;
@@ -12,4 +13,5 @@ export interface ICommand {
 export default [
   pingCommand,
   signupCommand,
+  openCommand,
 ];
