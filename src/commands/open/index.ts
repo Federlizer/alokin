@@ -17,13 +17,16 @@ async function execute(message: Message, args: string[]) {
     return;
   }
 
-  let tournament = new Tournament({
-    name: args[0] ?? channel.name,
-  });
+  const name = channel.name;
+  const displayName = args.length !== 0
+    ? args.join(' ')
+    : channel.name;
+
+  let tournament = new Tournament({ name, displayName });
 
   tournament = await tournament.save();
 
-  const msg = `Registration for ${tournament.name} is open`;
+  const msg = `Registration for ${tournament.displayName} is open`;
   channel.send(msg);
 }
 

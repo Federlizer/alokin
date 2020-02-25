@@ -7,8 +7,6 @@ import {
   User,
 } from 'discord.js';
 
-import tournamentNames from './tournamentNames';
-
 import Tournament, { ITournament } from '../../models/Tournament';
 
 async function execute(message: Message, _: string[]) {
@@ -39,7 +37,7 @@ async function execute(message: Message, _: string[]) {
   tournament.participants = [...tournament.participants, user.tag];
   tournament = await tournament.save();
 
-  const msg = 'You have been signed up for the ${TOURNAMENT_DISPLAY_NAME} tournament.';
+  const msg = `You have been signed up for the ${tournament.displayName} tournament.`;
   userDMChannel.send(msg)
 }
 
