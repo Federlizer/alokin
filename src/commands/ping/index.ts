@@ -6,6 +6,6 @@ function ping(message: Message, _: string[]) {
 
 export default {
   name: 'ping',
-  description: 'Ping!',
+  description: 'Pings Alokin, he\'ll try to Pong! back.',
   execute: ping,
 }

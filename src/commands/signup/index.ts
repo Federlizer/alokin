@@ -43,6 +43,9 @@ async function execute(message: Message, _: string[]) {
 
 export default {
   name: 'signup',
-  description: 'Sign up for an event/tournament that\'s been created by the channel',
+  description: 'Signs up (registers) the user for a tournament ' +
+    '(the registration has to be open for that tournament) using ' +
+    'their Tag as an identification. One has to register on ' +
+    'the specific channel that the tournament has been opened on.',
   execute,
 }

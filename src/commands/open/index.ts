@@ -32,6 +32,9 @@ async function execute(message: Message, args: string[]) {
 
 export default {
   name: 'open',
-  description: 'Open registration for a tournament',
+  description: 'Open registration for a tournament. ' +
+    'A unique name will be created using the channel name ' +
+    'the command was invoked in. If the TOURNAMENT_DISPLAY_NAME ' +
+    'argument isn\'t passed, the channel name is going to be used for it instead.',
   execute,
 }
