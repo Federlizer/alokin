@@ -7,20 +7,23 @@ import mongoose from 'mongoose';
 const { db } = config;
 const connectionString = `mongodb://${db.user}:${db.password}@${db.hostname}/${db.database}`;
 
-mongoose.connect( connectionString, { useNewUrlParser: true, useUnifiedTopology: true })
-  .catch((err) => {
-    throw err;
-  });
-
 const alokin = new Alokin({
   prefix: config.prefix,
   commands,
 });
 
+mongoose.connect( connectionString, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => {
+    console.log('DB connected');
+    return alokin.start(config.token)
+  })
+  .then(() => {
+    console.log('Alokin has been setup');
+  })
+  .catch((err) => {
+    console.error(err);
+  });
 
-alokin.start(config.token)
-  .then(() => console.log('Aloking has been setup'))
-  .catch((err) => console.error(err));
 
 function gracefulShutdown() {
   alokin.stop()
