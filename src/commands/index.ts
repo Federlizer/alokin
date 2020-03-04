@@ -1,19 +1,20 @@
 import { Message } from 'discord.js';
 
 import pingCommand from './ping';
-import signupCommand from './signup';
-import openCommand from './open';
+import tournamentCommand from './tournament';
+
 import helpCommand from './help';
 
 export interface ICommand {
   name: string;
   description: string;
   execute: (message: Message, args: string[]) => void;
+  subcommands?: ICommand[];
 };
 
 export default [
   pingCommand,
-  signupCommand,
-  openCommand,
+  tournamentCommand,
+
   helpCommand,
 ];
