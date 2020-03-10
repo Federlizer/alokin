@@ -2,6 +2,17 @@ import { Message, TextChannel, DMChannel } from 'discord.js';
 
 import Tournament, { ITournament } from '../../../models/Tournament';
 
+const steamGroupsLinks = [
+  'https://steamcommunity.com/groups/',
+  'https://www.steamcommunity.com/groups/',
+
+  'http://steamcommunity.com/groups/',
+  'http://www.steamcommunity.com/groups/',
+
+  'steamcommunity.com/groups/',
+  'www.steamcommunity.com/groups/',
+];
+
 async function execute(message: Message, args: string[]): Promise<void> {
   const channel: TextChannel = message.channel as TextChannel;
 
@@ -19,17 +30,45 @@ async function execute(message: Message, args: string[]): Promise<void> {
     return;
   }
 
-  if (tournament.teams && args.length === 0) {
-    let msg = 'You need to provide a link to your Steam Group in order to register for this tournament.';
-    msg += 'The link you provide must be a valid one, or your registration won\'t be accepted at the start of the tournament!';
+  let registrationName: string = '';
+  const replyChannel: DMChannel = await message.author.createDM();
 
-    channel.send(msg);
-    return;
+  if (tournament.teams) {
+    if (args.length === 0) {
+      let msg = 'You need to provide a link to your Steam Group in order to register for this tournament.';
+      msg += 'The link you provide must be a valid one, or your registration won\'t be accepted at the start of the tournament!';
+
+      channel.send(msg);
+      return;
+    }
+
+    const groupLink = args[0];
+    const validLink = steamGroupsLinks.find((link) => {
+      if (
+        groupLink.toLowerCase().startsWith(link)
+        && groupLink.length > link.length
+      ) {
+        registrationName = groupLink.substring(link.length);
+        return true;
+      }
+
+      return false;
+    });
+
+    if (!validLink) {
+      let msg = 'The provided link is invalid. You need to provide a link to a steam group in one of the following formats:\n';
+      msg += '```';
+      msg += steamGroupsLinks.join('\n');
+      msg += '```';
+
+      replyChannel.send(msg);
+      return;
+    }
+  } else {
+    registrationName = message.author.tag;
   }
 
-  const replyChannel: DMChannel = await message.author.createDM();
-  const participantString = args[0] ?? message.author.tag;
-  const success = await tournament.registerParticipant(participantString);
+  const success = await tournament.registerParticipant(registrationName);
 
   if (!success) {
     let msg = tournament.teams ? 'Your team has' : 'Your tag is';
