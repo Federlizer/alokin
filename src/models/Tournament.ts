@@ -45,6 +45,9 @@ TournamentSchema.methods.openRegistration = async function openRegistration() {
 };
 
 TournamentSchema.methods.registerParticipant = async function registerParticipant(participant: string): Promise<boolean> {
+  // don't allow empty names
+  if (participant.length === 0) return false;
+
   const alreadyRegistered = this.registered.find((r: string) => r === participant);
 
   if (alreadyRegistered) return false;
