@@ -3,6 +3,10 @@ import {
   TextChannel,
 } from 'discord.js';
 
+import config from '../../../config';
+import challonge from '../../../challonge';
+import ChallongeTournament from '../../../challonge/ITournament';
+
 import Tournament, { ITournament } from '../../../models/Tournament';
 
 async function execute(message: Message, args: string[]): Promise<void> {
@@ -12,10 +16,21 @@ async function execute(message: Message, args: string[]): Promise<void> {
 
   if (tournament === null) return;
 
-  console.log(tournament);
   await tournament.closeRegistration();
 
-  await channel.send('Tournament registration has been closed');
+  const challongeClient = challonge.createClient({ apiKey: config.challonge.apiKey });
+
+  const challongeTournament: ChallongeTournament = await challongeClient.createTournament({
+    name: tournament.displayName,
+    type: 'double elimination',
+  });
+
+  await challongeClient.insertParticipants({
+    tournamentId: challongeTournament.id,
+    participants: tournament.registered,
+  });
+
+  await channel.send(`Tournament registration has been closed. Tournament link is ${challongeTournament.full_challonge_url}`);
 }
 
 export default {
