@@ -25,7 +25,7 @@ export default class Challonge {
       name: string,
       type: ('single elimination'|'double elimination'),
     }
-  ): Promise<number> {
+  ): Promise<ITournament> {
     let url = `${this.path}/tournaments?`;
     url += `api_key=${this.apiKey}&`;
     url += `tournament[open_signup]=false&`;
@@ -45,7 +45,7 @@ export default class Challonge {
     }
 
     const { tournament } = JSON.parse(response.body);
-    return tournament.id;
+    return tournament;
   }
 
   /**
